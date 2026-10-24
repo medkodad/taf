@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>TAF TypeScript · Poudlard</title>
+<link rel="icon" href="data:,">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f1ea;--panel:#fffdf8;--ink:#17142b;--mut:#6b6882;--line:rgba(23,20,43,.12);--gold:#a67c1a;--acc:#4b32c8;--code:#14122a;--codeink:#e8e6f6;--c-key:#b9a2ff;--c-str:#f3d27a;--c-num:#ff9f7a;--c-com:#76738f;--c-typ:#7fe0c0;--ok:#2fbf84;--bad:#ff6b81;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0a0916;--panel:#121127;--ink:#efedfb;--mut:#908da9;--line:rgba(255,255,255,.1);--gold:#e8c56e;--acc:#9b85ff;--code:#0a0918}}
+:root[data-theme="dark"]{--bg:#0a0916;--panel:#121127;--ink:#efedfb;--mut:#908da9;--line:rgba(255,255,255,.1);--gold:#e8c56e;--acc:#9b85ff;--code:#0a0918}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 Inter,system-ui,sans-serif;min-height:100vh;
+background-image:radial-gradient(700px 380px at 85% -5%,color-mix(in srgb,var(--acc) 22%,transparent),transparent),radial-gradient(600px 360px at 0% 100%,color-mix(in srgb,var(--gold) 18%,transparent),transparent)}
+.app{display:grid;grid-template-columns:290px 1fr;min-height:100vh;max-width:1280px;margin:0 auto}
+aside{padding:36px 22px;border-right:1px solid var(--line);position:sticky;top:0;align-self:start;height:100vh}
+.logo{font:800 26px/1.1 Fraunces,Georgia,serif;letter-spacing:-.01em}.logo em{color:var(--gold);font-style:normal}
+.sub{color:var(--mut);font-size:13px;margin:6px 0 28px}
+nav{display:flex;flex-direction:column;gap:6px}
+nav button{all:unset;cursor:pointer;display:flex;gap:12px;align-items:center;padding:11px 12px;border-radius:12px;color:var(--mut);transition:.2s;border:1px solid transparent}
+nav button b{font:700 13px 'JetBrains Mono',monospace;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);flex:none}
+nav button span{font-size:14px;font-weight:500}
+nav button:hover{background:var(--panel);color:var(--ink)}
+nav button.on{background:var(--panel);color:var(--ink);border-color:var(--line);box-shadow:0 8px 24px -14px rgba(20,10,60,.45)}
+nav button.on b{background:var(--ink);color:var(--bg);border-color:transparent}
+nav button.done b{background:color-mix(in srgb,var(--ok) 20%,var(--panel));color:var(--ok);border-color:var(--ok)}
+main{padding:40px 36px 70px;min-width:0}
+.kick{font:600 12px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{font:800 clamp(30px,4.6vw,46px)/1.05 Fraunces,Georgia,serif;margin:10px 0 12px;letter-spacing:-.02em}
+.obj{color:var(--mut);max-width:62ch;margin:0 0 20px}
+.chip{display:inline-block;font:500 13px 'JetBrains Mono',monospace;color:var(--acc);background:color-mix(in srgb,var(--acc) 10%,transparent);border:1px solid color-mix(in srgb,var(--acc) 30%,transparent);padding:6px 12px;border-radius:10px;margin-bottom:26px;max-width:100%;overflow-x:auto;white-space:nowrap}
+.grid{display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+.win{background:var(--code);border-radius:18px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;box-shadow:0 30px 60px -35px rgba(10,5,40,.7)}
+.bar{display:flex;align-items:center;gap:7px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
+.bar i{width:10px;height:10px;border-radius:50%;background:#ff5f57}.bar i:nth-child(2){background:#febc2e}.bar i:nth-child(3){background:#28c840}
+.bar span{margin-left:8px;font:12px 'JetBrains Mono',monospace;color:#8f8ca8;flex:1}
+.run{all:unset;cursor:pointer;font:600 12px Inter;color:#0d0b1f;background:linear-gradient(135deg,#f3d27a,#e0a93c);padding:6px 14px;border-radius:99px;transition:.2s}
+.run:hover{filter:brightness(1.08);transform:translateY(-1px)}.run:disabled{opacity:.5;cursor:default}
+pre{margin:0;padding:18px;font:13px/1.7 'JetBrains Mono',ui-monospace,monospace;color:var(--codeink);overflow:auto;flex:1;min-height:230px;max-height:460px;tab-size:2}
+.k{color:var(--c-key)}.s{color:var(--c-str)}.n{color:var(--c-num)}.c{color:var(--c-com);font-style:italic}.t{color:var(--c-typ)}
+.l{display:block;animation:in .25s both}@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.dim{color:var(--c-com)}.gold{color:var(--c-str)}
+.prompt{color:var(--c-com)}
+.empty{color:var(--c-com)}
+.foot{display:flex;justify-content:space-between;margin-top:22px;gap:10px}
+.foot button{all:unset;cursor:pointer;padding:10px 18px;border-radius:12px;border:1px solid var(--line);background:var(--panel);font-weight:600;font-size:14px}
+.foot button:hover{border-color:var(--acc)}.foot button[disabled]{opacity:.35;cursor:default}
+@media(max-width:900px){.app{grid-template-columns:1fr}aside{position:static;height:auto;padding:22px 16px 6px;border:0}nav{flex-direction:row;overflow-x:auto;padding-bottom:6px}nav button span{display:none}nav button{padding:6px}main{padding:18px 16px 60px}.grid{grid-template-columns:1fr}.sub{margin-bottom:14px}}
+</style></head><body><div class="app">
+<aside><div class="logo">Académie<br>de <em>Poudlard</em></div><div class="sub">TAF TypeScript · 6 exercices</div><nav id="nav"></nav></aside>
+<main><div class="kick" id="kick"></div><h1 id="ttl"></h1><p class="obj" id="obj"></p><div class="chip" id="chip"></div>
+<div class="grid"><div class="win"><div class="bar"><i></i><i></i><i></i><span id="file"></span></div><pre id="code"></pre></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i><span>terminal</span><button class="run" id="run">▶ Run</button></div><pre id="term"></pre></div></div>
+<div class="foot"><button id="prev">← Précédent</button><button id="next">Suivant →</button></div></main></div>
+<script>
+const EX=[
+{t:"Ajouter un nouveau sorcier",o:"Enregistrer un sorcier sans que l’appelant fournisse d’identifiant.",chip:'NewWizard = Omit<Wizard, "id">',file:"src/types.ts · repository.ts",
+code:`export type NewWizard = Omit<Wizard, "id">;
+
+// WizardRepository
+create(data: NewWizard): Wizard {
+  const wizard: Wizard = { id: this.nextId++, ...data };
+  this.add(wizard);
+  return wizard;
+}
+
+// main.ts
+wizards.create({
+  name: "Harry Potter", house: "Gryffindor",
+  level: 5, active: true
+});`,
+out:[["> wizards.create(newWizard)","dim"],["{ id: 1,","gold"],["  name: 'Harry Potter',","gold"],["  house: 'Gryffindor',","gold"],["  level: 5, active: true }","gold"]]},
+{t:"Filtrer par maison",o:"Récupérer tous les sorciers appartenant à une maison spécifique.",chip:'findByHouse(house: Wizard["house"]): Wizard[]',file:"src/repository.ts",
+code:`findByHouse(house: Wizard["house"]): Wizard[] {
+  return this.getAll().filter(
+    wizard => wizard.house === house
+  );
+}
+
+// main.ts
+wizards.findByHouse("Gryffindor");`,
+out:[["> wizards.findByHouse(\"Gryffindor\")","dim"],["[ { id: 1, name: 'Harry Potter',","gold"],["    house: 'Gryffindor', level: 5 },","gold"],["  { id: 3, name: 'Hermione Granger',","gold"],["    house: 'Gryffindor', level: 6 } ]","gold"]]},
+{t:"Événement de sort",o:"Un gestionnaire qui n’accepte que les événements de lancement de sorts.",chip:'Extract<AcademyEvent, { type: "spell-cast" }>',file:"src/types.ts · main.ts",
+code:`export type SpellCastEvent =
+  Extract<AcademyEvent, { type: "spell-cast" }>;
+
+function handleSpellCast(event: SpellCastEvent): void {
+  console.log(
+    \`Wizard \${event.wizardId} cast \${event.spellName}\`
+  );
+}
+
+handleSpellCast({
+  type: "spell-cast",
+  wizardId: 1,
+  spellName: "Expelliarmus"
+});`,
+out:[["> handleSpellCast({ type: \"spell-cast\", ... })","dim"],["Wizard 1 cast Expelliarmus","ok"]]},
+{t:"Valider la puissance d’un sort",o:"Refuser un sort si sa puissance est négative, avec un décorateur de méthode.",chip:"@ValidateSpellPower",file:"src/decorators.ts · repository.ts",
+code:`export function ValidateSpellPower(
+  target: object,
+  propertyKey: string | symbol,
+  descriptor: PropertyDescriptor): void {
+  const originalMethod = descriptor.value as (...args: unknown[]) => unknown;
+
+  descriptor.value = function (this: unknown, ...args: unknown[]) {
+    const candidate: unknown = args[0];
+    if (typeof candidate === "object" && candidate !== null
+        && "power" in candidate && typeof candidate.power === "number"
+        && candidate.power < 0) {
+      throw new Error("Spell power cannot be negative");
+    }
+    return originalMethod.apply(this, args);
+  };
+}
+
+// SpellRepository
+@ValidateSpellPower
+override add(spell: Spell): void { super.add(spell); }`,
+out:[["> spells.add({ name: \"Protego\", power: 50 })","dim"],["> spells.add({ name: \"Invalid Spell\", power: -10 })","dim"],["Spell power cannot be negative","bad"]]},
+{t:"Méthode avec mise en cache",o:"Éviter de recalculer le même résultat quand une méthode reçoit les mêmes arguments.",chip:"@Cache  ·  WeakMap<object, Map<string, unknown>>",file:"src/decorators.ts · main.ts",
+code:`export function Cache(target: object,
+  propertyKey: string | symbol, descriptor: PropertyDescriptor): void {
+  const originalMethod = descriptor.value as (...args: unknown[]) => unknown;
+  const instanceCaches = new WeakMap<object, Map<string, unknown>>();
+
+  descriptor.value = function (this: object, ...args: unknown[]) {
+    let cache = instanceCaches.get(this);
+    if (!cache) { cache = new Map(); instanceCaches.set(this, cache); }
+    const key = JSON.stringify(args);
+    if (cache.has(key)) {
+      console.log(\`[CACHE HIT] \${String(propertyKey)}\`);
+      return cache.get(key);
+    }
+    console.log(\`[CACHE MISS] \${String(propertyKey)}\`);
+    const result = originalMethod.apply(this, args);
+    cache.set(key, result);
+    return result;
+  };
+}
+
+class SpellCalculator {
+  @Cache
+  calculatePower(basePower: number, multiplier: number): number {
+    console.log("Calculating...");
+    return basePower * multiplier;
+  }
+}`,
+out:[["> calculator.calculatePower(10, 3)","dim"],["[CACHE MISS] calculatePower","gold"],["Calculating...","dim"],["30","ok"],["> calculator.calculatePower(10, 3)","dim"],["[CACHE HIT] calculatePower","ok"],["30","ok"],["> calculator.calculatePower(5, 2)","dim"],["[CACHE MISS] calculatePower","gold"],["Calculating...","dim"],["10","ok"]]},
+{t:"Renforcer le Type Guard",o:"S’assurer que la maison d’un sorcier fait partie des quatre maisons valides.",chip:"isHouse(value: unknown): value is House",file:"src/main.ts",
+code:`const validHouses: readonly House[] = [
+  "Gryffindor", "Slytherin", "Ravenclaw", "Hufflepuff"
+];
+
+function isHouse(value: unknown): value is House {
+  return (
+    typeof value === "string" &&
+    validHouses.some(house => house === value)
+  );
+}
+
+function isWizard(value: unknown): value is Wizard {
+  if (typeof value !== "object" || value === null) return false;
+  const candidate = value as Record<string, unknown>;
+  return (
+    typeof candidate.id === "number" &&
+    typeof candidate.name === "string" &&
+    isHouse(candidate.house) &&
+    typeof candidate.level === "number" &&
+    typeof candidate.active === "boolean"
+  );
+}`,
+out:[["> isWizard(validData)   // Gryffindor","dim"],["true","ok"],["> isWizard(invalidData) // Durmstrang","dim"],["false","bad"]]}
+];
+const KW=/\b(export|type|function|const|let|return|if|new|class|import|from|throw|override|extends|typeof|void|as|readonly|this)\b/g;
+function hl(src){const e=src.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const tok=[];const keep=m=>{tok.push(m);return "\u0001"+(tok.length-1)+"\u0002"};
+let r=e.replace(/(\/\/[^\n]*)/g,m=>keep('<span class="c">'+m+'</span>')).replace(/(`[^`]*`|"[^"\n]*")/g,m=>keep('<span class="s">'+m+'</span>'));
+r=r.replace(KW,'<span class="k">$1</span>').replace(/\b(\d+)\b/g,'<span class="n">$1</span>').replace(/\b([A-Z][A-Za-z]+)\b(?![^<]*<\/span>)/g,'<span class="t">$1</span>').replace(/(@[A-Za-z]+)/g,'<span class="n">$1</span>');
+return r.replace(/\u0001(\d+)\u0002/g,(_,i)=>tok[i]);}
+let cur=0,timer=null,done=new Set();
+const $=id=>document.getElementById(id);
+function nav(){$("nav").innerHTML=EX.map((x,i)=>`<button class="${i==cur?'on':''} ${done.has(i)?'done':''}" data-i="${i}"><b>${done.has(i)?'✓':i+1}</b><span>${x.t}</span></button>`).join("");
+$("nav").querySelectorAll("button").forEach(b=>b.onclick=()=>go(+b.dataset.i));}
+function go(i){clearTimeout(timer);cur=i;const x=EX[i];
+$("kick").textContent="Exercice "+(i+1)+" / 6";$("ttl").textContent=x.t;$("obj").textContent=x.o;$("chip").textContent=x.chip;$("file").textContent=x.file;
+$("code").innerHTML=hl(x.code);$("term").innerHTML='<span class="empty">Appuie sur ▶ Run pour exécuter…</span>';$("run").disabled=false;
+$("prev").disabled=i==0;$("next").disabled=i==5;nav();}
+function run(){const x=EX[cur];const t=$("term");t.innerHTML="";$("run").disabled=true;let k=0;
+(function step(){if(k>=x.out.length){done.add(cur);$("run").disabled=false;nav();return}
+const [txt,c]=x.out[k++];const s=document.createElement("span");s.className="l "+c;s.textContent=txt;t.appendChild(s);timer=setTimeout(step,420);})();}
+$("run").onclick=run;$("prev").onclick=()=>go(cur-1);$("next").onclick=()=>go(cur+1);go(0);
+</script></body></html>
